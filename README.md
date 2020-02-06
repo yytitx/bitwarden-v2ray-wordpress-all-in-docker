@@ -15,3 +15,17 @@ docker快速搭建bitwarden+v2ray+wordpress服务
 可以把这个命令加入crontab计划
 ### Step 5 - 配置v2ray
 v2ray配置文件在v2ray文件夹下，你只需要把uuid填上即可，关于生成uuid，可以[点击这里](https://www.uuidgenerator.net/)生成uuid。
+请手动输入客户端配置，客户端配置如下：
+<pre>
+    地址: 你的域名
+    端口：443
+    用户id：生成的uuid
+    额外id：64
+    加密方式：none
+    传输方式：ws
+    伪装类型：none
+    伪装域名：你的域名
+    path：/scret
+    底层传输安全：tls
+    
+</pre>
