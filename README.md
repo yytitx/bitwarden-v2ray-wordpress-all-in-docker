@@ -13,7 +13,10 @@ docker快速搭建bitwarden+v2ray+wordpress服务
 如果要延长证书，请输入：
 <pre>$docker exec -it nginx certbot-auto renew</pre>
 可以把这个命令加入crontab计划
-### Step 5 - 配置v2ray
+### Step 5 - 修复wordpress安装插件要求填入ftp的问题和给wordpress添加redis缓存。
+执行目录下的脚本：<pre>./install_redis.sh</pre>
+然后在wordpress安装Redis Object Cache插件。
+### Step 6 - 配置v2ray
 v2ray配置文件在v2ray文件夹下，你只需要把uuid填上即可，关于生成uuid，可以[点击这里](https://www.uuidgenerator.net/)生成uuid。
 请手动输入客户端配置，客户端配置如下：
 <pre>
