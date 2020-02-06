@@ -2,7 +2,7 @@
 docker快速搭建bitwarden+v2ray+wordpress服务
 
 ## 部署 
-### Step 1
+### Step 1 - 克隆版本库
 <pre>$git clone https://github.com/TUT123456/bitwarden-v2ray-wordpress-all-in-docker.git</pre>
 ### Step 2 - 修改conf文件夹下配置文件里的域名
 ### Step 3 - 用docker-compose部署应用
