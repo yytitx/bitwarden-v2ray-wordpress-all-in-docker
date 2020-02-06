@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+
+  wp:
+    image: ${WP_IMAGE}
+    restart: always
+    container_name: ${WP_HOST}
+    networks:
+      - traefik
+    environment:
+        WORDPRESS_DB_HOST: ${DB_HOST}
+        WORDPRESS_TABLE_PREFIX: ${WP_DB_PREFIX}
+        WORDPRESS_DB_NAME: ${DB_NAME}
+        WORDPRESS_DB_USER: ${DB_USER}
+        WORDPRESS_DB_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./wordpress:/var/www/html
+
+  mariadb:
+    image: ${DB_IMAGE}
+    restart: always
+    container_name: ${DB_HOST}
+    networks:
+      - traefik
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+    volumes:
+      - ./data:/var/lib/mysql
+
+  nginx:
+    image: ${NGX_IMAGE}
+    restart: always
+    container_name: nginx
+    networks:
+      - traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./conf:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx
+      - ./wordpress:/var/www/html
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - bitwarden
+      - wp
+      - v2ray
+
+  bitwarden:
+    image: ${BW_IMAGE}
+    restart: always
+    container_name: bitwarden
+    networks:
+      - traefik
+    volumes:
+      - ./bw-data:/data
+    environment:
+      WEBSOCKET_ENABLED: 'true' # Required to use websockets
+      SIGNUPS_ALLOWED: 'false'   # set to false to disable signups
+
+  redis:
+    image: ${REDIS_IMAGE}
+    container_name: redis
+    restart: always
+    networks:
+      - traefik
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - ./redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis/data:/data
+
+  v2ray:
+    image: ${V2RAY_IMAGE}
+    container_name: v2ray
+    restart: always
+    networks:
+      - traefik
+    expose:
+      - 2527
+    volumes:
+      - ./v2ray:/etc/v2ray
+      - ./v2ray/config.json:/etc/v2ray/config.json:ro
+
+
+networks:
+  traefik:
+    external: true
