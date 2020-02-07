@@ -42,10 +42,10 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx/conf:/etc/nginx/conf.d
-      - ./nginx/logs:/var/log/nginx
-      - ./nginx/certs:/etc/letsencrypt
-      - ./etc/localtime:/etc/localtime:ro
+      - ./conf:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx
+      - ./wordpress:/var/www/html
+      - ./certs:/etc/nginx/certs:ro
     depends_on:
       - bitwarden
       - wp
@@ -55,13 +55,23 @@ services:
     image: ${BW_IMAGE}
     restart: always
     container_name: bitwarden
+    ports:
+      - 465:465
     networks:
       - traefik
     volumes:
       - ./bw-data:/data
     environment:
-      WEBSOCKET_ENABLED: 'true' # Required to use websockets
-      SIGNUPS_ALLOWED: 'false'   # set to false to disable signups
+      WEBSOCKET_ENABLED: ${WEBSOCKET_ENABLED} # Required to use websockets
+      SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED}   # set to false to disable signups
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_FROM: ${SMTP_FROM}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SSL: ${SMTP_SSL}
+      SMTP_EXPLICIT_TLS: ${SMTP_EXPLICIT_TLS}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      DOMAIN: ${DOMAIN}
 
   redis:
     image: ${REDIS_IMAGE}
