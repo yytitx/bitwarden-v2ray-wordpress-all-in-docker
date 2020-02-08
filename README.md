@@ -2,6 +2,7 @@
 此项目用docker部署bitwarden密码管理服务、wordpress内容管理平台、v2ray+ws+tls+cdn。
 
 ## 部署 
+
 ### Step 1 - 克隆版本库
 在根目录下运行：
 <pre>
@@ -9,9 +10,7 @@ $git clone https://github.com/TUT123456/bitwarden-v2ray-wordpress-all-in-docker.
 $mv bitwarden-v2ray-wordpress-all-in-docker docker
 $cd docker
 </pre>
-### Step 2 - 修改配置
-修改nginx/conf下配置文件内的域名和证书路径，
-填完.env内的环境变量。
+
 ### Step 3 - 申请证书
 这里我用的是certbot/dns-cloudflare，请酌情修改。
 先去[cloudflare](https://dash.cloudflare.com/login)注册账号，并把域名交给cloudflare解析。并获取cloudflare api。
@@ -50,8 +49,13 @@ $docker run -it --rm --name certbot -v "/root/docker/nginx/certs:/etc/letsencryp
 </pre>
 即可，你可以加入crontab计划自动续期证书。
 
+### Step 3 - 修改配置
+修改nginx/conf下配置文件内的域名和证书路径，
+填完.env内的环境变量。
+
 ### Step 4 - 用docker-compose部署应用
 <pre>$docker-compose up -d</pre>
+
 ### Step 5 - 配置v2ray
 v2ray配置文件在v2ray文件夹下，你只需要把uuid填上即可，关于生成uuid，可以[点击这里](https://www.uuidgenerator.net/)生成uuid。
 请手动输入客户端配置，客户端配置如下：
