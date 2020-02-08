@@ -7,7 +7,7 @@ services:
     restart: always
     container_name: ${WP_HOST}
     networks:
-      - traefik
+      - nginx
     environment:
         WORDPRESS_DB_HOST: ${DB_HOST}
         WORDPRESS_TABLE_PREFIX: ${WP_DB_PREFIX}
@@ -22,30 +22,30 @@ services:
     restart: always
     container_name: ${DB_HOST}
     networks:
-      - traefik
+      - nginx
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
     volumes:
-      - ./data:/var/lib/mysql
+      - db:/var/lib/mysql
 
   nginx:
     image: ${NGX_IMAGE}
     restart: always
     container_name: nginx
     networks:
-      - traefik
+      - nginx
     ports:
       - 80:80
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./conf:/etc/nginx/conf.d
-      - ./logs:/var/log/nginx
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
       - ./wordpress:/var/www/html
-      - ./certs:/etc/nginx/certs:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - bitwarden
       - wp
@@ -58,7 +58,7 @@ services:
     ports:
       - 465:465
     networks:
-      - traefik
+      - nginx
     volumes:
       - ./bw-data:/data
     environment:
@@ -78,7 +78,7 @@ services:
     container_name: redis
     restart: always
     networks:
-      - traefik
+      - nginx
     command: redis-server /etc/redis/redis.conf
     volumes:
       - ./redis/conf/redis.conf:/etc/redis/redis.conf
@@ -89,7 +89,7 @@ services:
     container_name: v2ray
     restart: always
     networks:
-      - traefik
+      - nginx
     expose:
       - 2527
     volumes:
@@ -98,5 +98,8 @@ services:
 
 
 networks:
-  traefik:
+  nginx:
     external: true
+
+volumes:
+  db:
