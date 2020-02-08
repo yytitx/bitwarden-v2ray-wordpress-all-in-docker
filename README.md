@@ -10,8 +10,8 @@ $mv bitwarden-v2ray-wordpress-all-in-docker docker
 $cd docker
 </pre>
 ### Step 2 - 修改配置
-把conf文件夹下两个nginx配置文件内的域名都改成你自己的。
-把.env内的参数也修改你自己的。
+修改nginx/conf下配置文件内的域名和证书路径，
+填完.env内的环境变量。
 ### Step 3 - 申请证书
 这里我用的是certbot/dns-cloudflare，请酌情修改。
 先去[cloudflare](https://dash.cloudflare.com/login)注册账号，并把域名交给cloudflare解析。并获取cloudflare api。
