@@ -1,5 +1,5 @@
 # bitwarden-v2ray-wordpress-all-in-docker
-docker快速搭建bitwarden+v2ray+wordpress服务
+此项目用docker部署bitwarden密码管理服务、wordpress内容管理平台、v2ray+ws+tls+cdn。
 
 ## 部署 
 ### Step 1 - 克隆版本库
